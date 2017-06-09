@@ -4,12 +4,12 @@ require_relative('../models/film.rb')
 
 class SqlRunner
 
-  def SqlRunner.run(sql)
+  def self.run(sql)
     begin
-      db = PG.connect({dabase: 'cc_cinema', hotsname: 'localhost' })
+      db = PG.connect({dbname: 'cc_cinema', host: 'localhost' })
       result = db.exec(sql)
     ensure
-      db.close()
+      db.close
     end
     return result
   end

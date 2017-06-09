@@ -13,13 +13,13 @@ class Film
   end
 
   def save()
-    sql = "INSERT INTO films (title, price, hour) VALUES ('#{@title}', #{@price}, '#{@hour}') RETURNING id"
+    sql = "INSERT INTO films (title, price, hour) VALUES ('#{@title}', '#{@price}', '#{@hour}') RETURNING id"
     film = SqlRunner.run(sql).first()
     @id = film['id'].to_i
   end
 
   def update()
-    sql = "UPDATE films SET (title, price, hour) = ('#{@title}', #{@price}, '#{@hour}') WHERE id = #{@id}"
+    sql = "UPDATE films SET (title, price, hour) = ('#{@title}', '#{@price}', '#{@hour}') WHERE id = #{@id}"
     SqlRunner.run(sql)
   end
 
