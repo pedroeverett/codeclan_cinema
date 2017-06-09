@@ -27,6 +27,15 @@ class Customer
     SqlRunner.run(sql)
   end
 
+  def films()
+    sql ="SELECT films.* FROM films
+          INNER JOIN tickets
+          ON tickets.film_id = films.id 
+          WHERE tickets.customer_id = #{@id}"
+    films_hashes = SqlRunner.run(sql)
+    result = films_hashes.map{ |film_hash| Film.new(film_hash)}
+  end
+
   def self.all()
     sql = "SELECT * FROM customers"
     customers_hashes = SqlRunner.run(sql)
