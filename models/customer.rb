@@ -41,8 +41,17 @@ class Customer
               INNER JOIN tickets
               ON tickets.film_id = films.id 
               WHERE tickets.customer_id = #{@id}"
-     tickets = SqlRunner.run(sql).first         
+     tickets = SqlRunner.run(sql).first()         
     @funds = @funds - tickets['total'].to_i
+  end
+
+  def tickets()
+    sql = "SELECT COUNT(films.*) AS total FROM films
+          INNER JOIN tickets
+          ON tickets.film_id = films.id
+          WHERE tickets.customer_id = #{@id}"
+    tickets = SqlRunner.run(sql).first()
+    return tickets['total'].to_i
   end
 
   def self.all()
