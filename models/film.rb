@@ -23,10 +23,6 @@ class Film
     SqlRunner.run(sql)
   end
 
-  # def price()
-
-  # end
-
   def delete()
     sql = "DELETE FROM films WHERE id = #{@id}"
     SqlRunner.run(sql)
@@ -39,6 +35,15 @@ class Film
           WHERE tickets.film_id = #{@id}"
     customers_hashes = SqlRunner.run(sql)
     result = customers_hashes.map{ |customer_hash| Customer.new(customer_hash)}
+  end
+
+  def how_many_customers()
+    sql = "SELECT COUNT(customers.*) AS total FROM customers
+          INNER JOIN tickets
+          ON tickets.customer_id = customers.id
+          WHERE tickets.film_id = #{@id}"
+    customers = SqlRunner.run(sql).first()
+    return customers['total'].to_i   
   end
 
   def self.all()
