@@ -9,17 +9,16 @@ class Film
     @id = options['id'].to_i
     @title = options['title']
     @price = options['price'].to_i
-    @hour = options['hour']
   end
 
   def save()
-    sql = "INSERT INTO films (title, price, hour) VALUES ('#{@title}', '#{@price}', '#{@hour}') RETURNING id"
+    sql = "INSERT INTO films (title, price) VALUES ('#{@title}', '#{@price}') RETURNING id"
     film = SqlRunner.run(sql).first()
     @id = film['id'].to_i
   end
 
   def update()
-    sql = "UPDATE films SET (title, price, hour) = ('#{@title}', '#{@price}', '#{@hour}') WHERE id = #{@id}"
+    sql = "UPDATE films SET (title, price) = ('#{@title}', '#{@price}') WHERE id = #{@id}"
     SqlRunner.run(sql)
   end
 
@@ -44,6 +43,15 @@ class Film
           WHERE tickets.film_id = #{@id}"
     customers = SqlRunner.run(sql).first()
     return customers['total'].to_i   
+  end
+
+  def best_hour()
+    sql = "SELECT screenings.* FROM screenings 
+        INNER JOIN tickets
+        ON tickets.screening_id = screenings.id
+        WHERE tickets.film_id = #{@id}"
+    hours = SqlRunner.run(sql)
+    result = hours.map{ |hour| Screening.new(hour)}
   end
 
   def self.all()
